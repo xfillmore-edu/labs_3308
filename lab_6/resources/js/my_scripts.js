@@ -78,22 +78,24 @@ function changeColor(color) {
 function loadStatsPage() {
 	var tstat = document.getElementById('stats_table');
 	var rind, wins=0, losses=0;
-	for (rind = 0; rind < tstat.rows.length; rind++) {
-		var awayteam, winner;
-		team1 = tstat.rows[rind].cells[0].innerHTML;
-		team2 = tstat.rows[rind].cells[1].innerHTML;
-		if (parseInt(tstat.rows[rind].cells[2].innerHTML) > parseInt(tstat.rows[rind].cells[3].innerHTML)) {
+	for (rind = 2; rind < tstat.rows.length; rind++) {
+		var row = tstat.rows[rind];
+		var awayteam = row.cells[1].innerHTML;
+		var winner;
+		if (parseInt(row.cells[2].innerHTML) > parseInt(row.cells[3].innerHTML)) {
 			winner = 'CU Boulder';
 			wins++;
+			console.log('calculated a win');
 		}
-		else if (parseInt(tstat.rows[rind].cells[3].innerHTML) > parseInt(tstat.rows[rind].cells[2].innerHTML)) {
+		else if (parseInt(row.cells[3].innerHTML) > parseInt(row.cells[2].innerHTML)) {
 			winner = awayteam;
 			losses++;
+			console.log('calculated a loss');
 		}
 		else {
 			winner = 'error: unknown';
 		}
-		tstat.rows[rind].cells[4].innerHTML = winner;
+		row.cells[4].innerHTML = winner;
 	}
 	document.getElementById('wins').innerHTML = wins;
 	document.getElementById('losses').innerHTML = losses;
