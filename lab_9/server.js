@@ -27,7 +27,7 @@ const dbConfig = {
 	port: 5432,
 	database: 'football_db',
 	user: 'postgres',
-	password: 'pwd'
+	password: 'P7Wpan3raN*'
 };
 
 var db = pgp(dbConfig);
@@ -97,6 +97,98 @@ app.get('/register', function(req, res) {
 
 /*Add your other get/post request handlers below here: */
 
+// app.get('/home', function(req, res) {
+// 	res.render('pages/home',{
+// 		my_title:'Home Page',
+// 		color: 'FF0000',
+// 		color_msg: 'The Color Red'
+// 	});
+// });
+
+app.get('/home', function(req, res) {
+	var query = 'select * from favorite_colors;';
+	db.any(query)
+        .then(function (rows) {
+            res.render('pages/home',{
+				my_title: "Home Page",
+				data: rows,
+				color: '',
+				color_msg: ''
+			})
+
+        })
+        .catch(function (err) {
+            console.log('error', err);
+            res.render('pages/home', {
+                my_title: 'Home Page',
+                data: '',
+                color: '',
+                color_msg: ''
+            })
+        })
+});
+
+app.get('/home/pick_color', function(req, res) {
+	var color_choice = req.query.color_selection; // Investigate why the parameter is named "color_selection"
+	var color_options =  // Write a SQL query to retrieve the colors from the database
+	var color_message = // Write a SQL query to retrieve the color message for the selected color
+	db.task('get-everything', task => {
+        return task.batch([
+            task.any(color_options),
+            task.any(color_message)
+        ]);
+    })
+    .then(info => {
+    	res.render('pages/home',{
+				my_title: "Home Page",
+				data: // Return the color options
+				color: // Return the color choice
+				color_msg: // Return the color message
+			})
+    })
+    .catch(err => {
+            console.log('error', err);
+            res.render('pages/home', {
+                my_title: 'Home Page',
+                data: '',
+                color: '',
+                color_msg: ''
+            })
+    });
+
+});
+
+app.post('/home/pick_color', function(req, res) {
+	var color_hex = req.body.color_hex;
+	var color_name = req.body.color_name;
+	var color_message = req.body.color_message;
+	var insert_statement = // Write a SQL statement to insert a color into the favorite_colors table
+	var color_select = // Write a SQL statement to retrieve all of the colors in the favorite_colors table
+
+	db.task('get-everything', task => {
+        return task.batch([
+            task.any(insert_statement),
+            task.any(color_select)
+        ]);
+    })
+    .then(info => {
+    	res.render('pages/home',{
+				my_title: "Home Page",
+				data: // Return the color choices
+				color: // Return the hex value of the color added to the table
+				color_msg: // Return the color message of the color added to the table
+			})
+    })
+    .catch(err => {
+            console.log('error', err);
+            res.render('pages/home', {
+                my_title: 'Home Page',
+                data: '',
+                color: '',
+                color_msg: ''
+            })
+    });
+});
 
 app.listen(3000);
 console.log('3000 is the magic port');
